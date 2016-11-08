@@ -14,11 +14,11 @@ die() {
   exit 1
 }
 
-result="$(date +%F_%H-%M-%S-%Z)-result.html"
+result="$(/bin/date +%F_%H-%M-%S-%Z)-result.html"
 
 # --fail just says don't output the progress bar to stdout, and don't
-echo -ne "$(date +"%Y-%m-%d %H:%M:%S")\t" >> command-times
-if /usr/bin/time -a -o command-times -f %e \
+echo -ne "\"$(/bin/date +"%Y-%m-%d %H:%M:%S")\"," >> command-times.csv
+if /usr/bin/time -a -o command-times.csv -f %e \
   curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL"
 then
   # success, test the result

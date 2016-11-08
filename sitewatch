@@ -36,6 +36,5 @@ then
 
   rm "$root.diff" "$result"
 else
-  echo "ERROR: $output"
   echo ",\"$output\"" >> command-times.csv
 fi

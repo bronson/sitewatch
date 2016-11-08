@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# Ensures a website returns the expected results
+
+# Requires /usr/bin/time to be GNU Time.  BSD won't work.
+
+
+# potentially a security risk -- make sure you never run this
+# script from /tmp or something foolish like that.
+# TODO: replace with a proper config file?
+. ./config.sh
+
+die() {
+  echo $@
+  exit 1
+}
+
+result="$(date +%F_%H-%M-%S-%Z)-result.html"
+
+# --fail just says don't output the progress bar to stdout, and don't
+echo -ne "$(date +"%Y-%m-%d %H:%M:%S")\t" >> command-times
+if /usr/bin/time -a -o command-times -f %e \
+  curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL"
+then
+  # success, test the result
+  [ -f expected.html ] || die 'need an `expected.html` file.'
+  if diff expected.html "$result" > "$root.diff"
+  then
+    # perfecto, no differences.  nothing more to do.
+    rm "$result"
+  else
+    echo "UNEXPECTED OUTPUT:"
+    cat "$root.diff"
+  fi
+  rm "$root.diff"
+else
+  # error has already been printed
+  echo error
+fi

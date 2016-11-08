@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. ./config.sh
+
+while true
+do
+  ./sitewatch
+  tail -n 1 command-times
+  sleep $DELAY
+done

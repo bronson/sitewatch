@@ -1,0 +1,9 @@
+# The URL to test
+URL='http://www.example.com/'
+
+# If this many seconds elapse, kill the request and log an error
+TIMEOUT=10
+
+# number of seconds to sleep between the end of the previous
+# request and the start of the next one
+DELAY=2

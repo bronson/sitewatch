@@ -18,21 +18,24 @@ result="$(/bin/date +%F_%H-%M-%S-%Z)-result.html"
 
 # --fail just says don't output the progress bar to stdout, and don't
 echo -ne "\"$(/bin/date +"%Y-%m-%d %H:%M:%S")\"," >> command-times.csv
-if /usr/bin/time -a -o command-times.csv -f %e \
-  curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL"
+output="$(/usr/bin/time -a -o command-times.csv -f %e \
+  curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL" 2>&1)"
+if [ $? = 0 ]
 then
-  # success, test the result
   [ -f expected.html ] || die 'need an `expected.html` file.'
-  if diff expected.html "$result" > "$root.diff"
+
+  if ! diff expected.html "$result" > "$root.diff"
   then
-    # perfecto, no differences.  nothing more to do.
-    rm "$result"
-  else
+    # log error to screen
     echo "UNEXPECTED OUTPUT:"
     cat "$root.diff"
+    # log error to file
+    printf "\n\n\n$result:\n" >> command-errors.txt
+    cat "$root.diff" >> command-errors.txt
   fi
-  rm "$root.diff"
+
+  rm "$root.diff" "$result"
 else
-  # error has already been printed
-  echo error
+  echo "ERROR: $output"
+  echo ",\"$output\"" >> command-times.csv
 fi

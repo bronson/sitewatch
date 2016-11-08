@@ -5,8 +5,7 @@
 # Requires /usr/bin/time to be GNU Time.  BSD won't work.
 
 
-# potentially a security risk -- make sure you never run this
-# script from /tmp or something foolish like that.
+# executing the configuration is potentially a security risk.
 # TODO: replace with a proper config file?
 . ./config.sh
 

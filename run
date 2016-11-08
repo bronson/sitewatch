@@ -5,6 +5,6 @@
 while true
 do
   ./sitewatch
-  tail -n 1 command-times
+  tail -n 1 command-times.csv
   sleep $DELAY
 done

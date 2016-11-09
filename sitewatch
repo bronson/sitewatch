@@ -27,5 +27,5 @@ if [ $? = 0 ]; then
   fi
   rm -f "$root.diff" "$result"
 else
-  echo ",\"$output\"" >> command-times.csv
+  echo ",\""$output"\"" >> command-times.csv
 fi

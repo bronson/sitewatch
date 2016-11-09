@@ -10,7 +10,7 @@ This just gives a decent second opinion.
 
 ### Installation
 
-1. Customize the configuration parameters at the top of the script:
+1. `cp config.sh-example config.sh` and customize your configuration.
 
   ```bash
   URL='http://example.com/'
@@ -36,3 +36,17 @@ it at regular intervals.
 
 Or you can run it in a `screen` session.  That's easier but not nearly
 as reliable.
+
+### Output
+
+The timings are in the `command-times.csv` file.  There are three columns:
+* the date and time of the reading
+* the number of seconds taken by the request/response
+* an error string, if an error occurred.
+
+```csv
+"2016-11-08 16:08:49",0.04
+"2016-11-08 16:08:51",9.55,"curl: (6) Could not resolve host: www.example.com"
+"2016-11-08 16:09:01",0.02
+"2016-11-08 16:09:03",0.02
+```

@@ -9,23 +9,17 @@
 # TODO: replace with a proper config file?
 . ./config.sh
 
-die() {
-  echo $@
-  exit 1
-}
-
 result="$(/bin/date +%F_%H-%M-%S-%Z)-result.html"
 
 # --fail just says don't output the progress bar to stdout, and don't
 echo -ne "\"$(/bin/date +"%Y-%m-%d %H:%M:%S")\"," >> command-times.csv
 output="$(/usr/bin/time -a -o >(tr -d '\n' >> command-times.csv) -f %e --quiet \
   curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL" 2>&1)"
-if [ $? = 0 ]
-then
-  [ -f expected.html ] || die 'need an `expected.html` file.'
-
-  if ! diff expected.html "$result" > "$root.diff"
-  then
+if [ $? = 0 ]; then
+  if [ ! -f expected.html ]; then
+    echo ',"need an `expected.html` file."' >> command-times.csv
+    exit 1
+  elif ! diff expected.html "$result" > "$root.diff"; then
     # log error to screen
     echo "UNEXPECTED OUTPUT:"
     cat "$root.diff"
@@ -35,7 +29,6 @@ then
   fi
 
   rm "$root.diff" "$result"
-  echo >> command-times.csv
 else
   echo ",\"$output\"" >> command-times.csv
 fi

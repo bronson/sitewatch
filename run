@@ -1,9 +1,11 @@
 #!/bin/bash
 
+# Runs the sitewatch script and displays its output onscreen.
+# This is useful when you want to monitor it on the terminal.
+
 . ./config.sh
 
-while true
-do
+while true; do
   ./sitewatch
   tail -n 1 command-times.csv
   sleep $DELAY

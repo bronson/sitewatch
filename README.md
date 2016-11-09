@@ -1,6 +1,8 @@
 This script ensures a website is up.
 It tests the response body and logs the total time taken.
 
+## Purpose
+
 We banged this tool together because Pingdom was falsely reporting a site up
 (presumably only checking to layer 3) and our expensive paid service
 was reporting far more outages than actually existed (presumably network
@@ -8,7 +10,7 @@ issues on their end).
 
 This just gives a decent second opinion.
 
-### Installation
+## Installation
 
 1. `cp config.sh-example config.sh` and customize your configuration.
 
@@ -29,7 +31,7 @@ This just gives a decent second opinion.
 If your reply has dynamic content, you'll need to run it through grep
 or sed or something to remove the dynamic parts.
 
-### Running
+## Running
 
 Once the script runs reliably by hand, you can establish a cronjob to run
 it at regular intervals.
@@ -37,7 +39,7 @@ it at regular intervals.
 Or you can run it in a `screen` session.  That's easier but not nearly
 as reliable.
 
-### Output
+## Output
 
 The timings are in the `command-times.csv` file.  There are three columns:
 * the date and time of the reading

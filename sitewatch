@@ -11,9 +11,16 @@
 
 result="$(/bin/date +%F_%H-%M-%S-%Z)-result.html"
 
+# This is so completely insane...  Both Centos and Ubuntu have GNU time v1.7.
+# Ubuntu's puts error messages in its output unless you specify "--quiet".
+# Fedora's doesn't put error messages in its output and bombs if you say --quiet
+if /usr/bin/time --quiet echo > /dev/null 2>&1; then
+  quiet="--quiet"
+fi
+
 # --fail just says don't output the progress bar to stdout, and don't
 echo -ne "\"$(/bin/date +"%Y-%m-%d %H:%M:%S")\"," >> command-times.csv
-output="$(/usr/bin/time -a -o >(tr -d '\n' >> command-times.csv) -f %e \
+output="$(/usr/bin/time -a -o >(tr -d '\n' >> command-times.csv) -f %e $quiet \
   curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL" 2>&1)"
 if [ $? = 0 ]; then
   if [ ! -f expected.html ]; then

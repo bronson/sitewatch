@@ -17,18 +17,15 @@ output="$(/usr/bin/time -a -o >(tr -d '\n' >> command-times.csv) -f %e --quiet \
   curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL" 2>&1)"
 if [ $? = 0 ]; then
   if [ ! -f expected.html ]; then
-    echo ',"need an `expected.html` file."' >> command-times.csv
-    exit 1
+    echo ',"please create expected.html"' >> command-times.csv
   elif ! diff expected.html "$result" > "$root.diff"; then
-    # log error to screen
-    echo "UNEXPECTED OUTPUT:"
-    cat "$root.diff"
-    # log error to file
+    echo ',"output differs from expected.html"' >> command-times.csv
     printf "\n\n\n$result:\n" >> command-errors.txt
     cat "$root.diff" >> command-errors.txt
+  else
+    echo >> command-times.csv
   fi
-
-  rm "$root.diff" "$result"
+  rm -f "$root.diff" "$result"
 else
   echo ",\"$output\"" >> command-times.csv
 fi

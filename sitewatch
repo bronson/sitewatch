@@ -18,7 +18,7 @@ if /usr/bin/time --quiet echo > /dev/null 2>&1; then
   quiet="--quiet"
 fi
 
-# --fail just says don't output the progress bar to stdout, and don't
+# --fail just says don't output the progress bar to stdout, and ignore any non-200 results
 echo -ne "\"$(/bin/date +"%Y-%m-%d %H:%M:%S")\"," >> command-times.csv
 output="$(/usr/bin/time -a -o >(tr -d '\n' >> command-times.csv) -f %e $quiet \
   curl --fail --silent --show-error -m "$TIMEOUT" -o "$result" "$URL" 2>&1)"
@@ -28,9 +28,12 @@ if [ $? = 0 ]; then
   if [ ! -f expected.html ]; then
     echo ',"please create expected.html"' >> command-times.csv
   elif ! diff expected.html "$result" > "$root.diff"; then
-    echo ',"output differs from expected.html"' >> command-times.csv
-    printf "\n\n\n$result:\n" >> command-errors.txt
-    cat "$root.diff" >> command-errors.txt
+    echo ',"output differs"' >> command-times.csv
+    # ensure command-errors.txt doesn't grow without bound
+    if [ "$(find command-errors.txt -size -500k)" == command-errors.txt ]; then
+      printf "\n\n\n$result:\n" >> command-errors.txt
+      cat "$root.diff" >> command-errors.txt
+    fi
   else
     echo >> command-times.csv
   fi

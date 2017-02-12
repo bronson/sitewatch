@@ -20,24 +20,15 @@ This just gives a decent second opinion.
   DELAY=2    # number of seconds to sleep after the previous request finished.
   ```
 
-1. Run the script: `./script`.  It will print an error because the
-   expected result didn't match the actual.  Hit Control-C to interrupt
-   it after the first result is generated.
+1. Run the script: `./sitewatch`.  It will notice that you haven't specified
+   your expected output, so it will generate a request and save it in
+   `expected.html`.
 
-1. Set the result to be the expected HTML: `cp 2016-10-28_20-53-40-result.html expected.html`
-
-1. Now, run the script for real.  `./script`.
+1. Now, run the script: `./run`.  This will continue until you hit control-C.
+   Run it inside the screen utility and let it go for months.
 
 If your reply has dynamic content, you'll need to run it through grep
-or sed or something to remove the dynamic parts.
-
-## Running
-
-Once the script runs reliably by hand, you can establish a cronjob to run
-it at regular intervals.
-
-Or you can run it in a `screen` session.  That's easier but not nearly
-as reliable.
+or sed or something to remove the dynamic parts.  (TODO)
 
 ## Output
 

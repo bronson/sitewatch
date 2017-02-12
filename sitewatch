@@ -30,7 +30,7 @@ if [ $? = 0 ]; then
   elif ! diff expected.html "$result" > result.diff; then
     echo ',"output differs"' >> command-times.csv
     # ensure command-errors.txt doesn't grow without bound
-    if [ "$(find command-errors.txt -size -500k)" == command-errors.txt ]; then
+    if [ ! -e command-errors.txt ] || [ "$(find command-errors.txt -size -500k)" == command-errors.txt ]; then
       printf "\n\n\n$result:\n" >> command-errors.txt
       cat result.diff >> command-errors.txt
     fi

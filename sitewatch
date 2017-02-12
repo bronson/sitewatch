@@ -9,6 +9,11 @@
 # TODO: replace with a proper config file?
 . ./config.sh
 
+if [ ! -f expected.html ]; then
+  echo 'generating request to create expected.html'
+  curl --fail --silent --show-error -o "$result" "$URL"
+fi
+
 result="$(/bin/date +%F_%H-%M-%S-%Z)-result.html"
 
 # This is so completely insane...  Both Centos and Ubuntu have GNU time v1.7.
@@ -25,9 +30,7 @@ output="$(/usr/bin/time -a -o >(tr -d '\n' >> command-times.csv) -f %e $quiet \
 # TODO: should make all the following code uninterruptible.
 # Otherwise, terminating the script could potentially corrput the CSV.
 if [ $? = 0 ]; then
-  if [ ! -f expected.html ]; then
-    echo ',"please create expected.html"' >> command-times.csv
-  elif ! diff expected.html "$result" > result.diff; then
+  if ! diff expected.html "$result" > result.diff; then
     echo ',"output differs"' >> command-times.csv
     # ensure command-errors.txt doesn't grow without bound
     if [ ! -e command-errors.txt ] || [ "$(find command-errors.txt -size -500k)" == command-errors.txt ]; then

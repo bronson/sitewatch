@@ -27,17 +27,17 @@ output="$(/usr/bin/time -a -o >(tr -d '\n' >> command-times.csv) -f %e $quiet \
 if [ $? = 0 ]; then
   if [ ! -f expected.html ]; then
     echo ',"please create expected.html"' >> command-times.csv
-  elif ! diff expected.html "$result" > "$root.diff"; then
+  elif ! diff expected.html "$result" > result.diff; then
     echo ',"output differs"' >> command-times.csv
     # ensure command-errors.txt doesn't grow without bound
     if [ "$(find command-errors.txt -size -500k)" == command-errors.txt ]; then
       printf "\n\n\n$result:\n" >> command-errors.txt
-      cat "$root.diff" >> command-errors.txt
+      cat result.diff >> command-errors.txt
     fi
   else
     echo >> command-times.csv
   fi
-  rm -f "$root.diff" "$result"
+  rm -f result.diff "$result"
 else
   echo ",\""$output"\"" >> command-times.csv
 fi

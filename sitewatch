@@ -11,7 +11,7 @@
 
 if [ ! -f expected.html ]; then
   echo 'generating request to create expected.html'
-  curl --fail --silent --show-error -o "$result" "$URL"
+  curl --fail --silent --show-error -o "expected.html" "$URL"
 fi
 
 result="$(/bin/date +%F_%H-%M-%S-%Z)-result.html"
